@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Đếm Ngày Yêu</title>
+  <link rel="icon" type="image/x-icon" href="./flower_346218.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="container">
+  <div class="night"></div>
+
+  <!-- ========== DASHBOARD SIDEBAR ========== -->
+  <div class="dashboard-sidebar" id="dashboardSidebar">
+    <button class="dashboard-toggle" id="dashboardToggle" title="Toggle Sidebar">☰</button>
+    <nav class="dashboard-nav">
+      <a href="index.html" class="dashboard-item" data-section="home">
+        <span class="dashboard-icon">🏠</span>
+        <span class="dashboard-label">Trang chủ</span>
+      </a>
+      <a href="kyniem.html" class="dashboard-item dashboard-item--active" data-section="countdown">
+        <span class="dashboard-icon">💕</span>
+        <span class="dashboard-label">Đếm ngày yêu</span>
+      </a>
+      <a href="#gallery" class="dashboard-item" data-section="gallery">
+        <span class="dashboard-icon">🖼️</span>
+        <span class="dashboard-label">Bộ sưu tập ảnh</span>
+      </a>
+      <a href="#settings" class="dashboard-item" data-section="settings">
+        <span class="dashboard-icon">⚙️</span>
+        <span class="dashboard-label">Setting</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ========== LOVE COUNTER ========== -->
+  <div class="love-counter-wrap">
+    <h1 class="love-title">Hành Trình Tình Yêu</h1>
+    
+    <div class="couple-avatars">
+      <div class="avatar avatar--boy">
+        <img src="boy.png" alt="Boy">
+      </div>
+      <div class="heart-beat">💖</div>
+      <div class="avatar avatar--girl">
+        <img src="girl.png" alt="Girl">
+      </div>
+    </div>
+
+    <div class="time-blocks" id="loveCounter">
+      <div class="time-block">
+        <div class="time-value" id="daysVal">0</div>
+        <div class="time-label">Ngày</div>
+      </div>
+      <div class="time-block">
+        <div class="time-value" id="hoursVal">0</div>
+        <div class="time-label">Giờ</div>
+      </div>
+      <div class="time-block">
+        <div class="time-value" id="minsVal">0</div>
+        <div class="time-label">Phút</div>
+      </div>
+      <div class="time-block">
+        <div class="time-value" id="secsVal">0</div>
+        <div class="time-label">Giây</div>
+      </div>
+    </div>
+    
+    <div class="start-date-text">Bắt đầu từ: 17/02/2026</div>
+  </div>
+
+  <script src="./kyniem.js"></script>
+</body>
+</html>
