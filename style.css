@@ -6,79 +6,152 @@
   box-sizing: border-box;
 }
 
-/* Music player styles */
-.music-player {
+/* (Music player styles moved to bottom section for clarity) */
+
+/* ========== DASHBOARD SIDEBAR ========== */
+.dashboard-sidebar {
   position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 10px 14px;
-  border-radius: 12px;
-  color: #fff;
-  backdrop-filter: blur(6px) saturate(1.2);
-  transition: all 180ms ease;
-  min-width: 220px;
-}
-.music-player .player-cover {
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
-  background-size: cover;
-  background-position: center;
-  flex-shrink: 0;
-}
-.music-player .player-btn {
-  background: transparent;
-  border: none;
-  color: inherit;
-  font-size: 16px;
-  cursor: pointer;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  background: rgba(18, 18, 24, 0.92);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px);
+  z-index: 400;
+  padding-top: 2rem;
+  overflow-y: auto;
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
-.music-player--mini {
-  width: clamp(52px, 16vw, 96px) !important;
-  height: clamp(52px, 16vw, 96px) !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
-  left: auto !important;
-  transform: none !important;
-  display: block !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  overflow: visible;
+.dashboard-sidebar.collapsed {
+  width: 70px;
 }
-.music-player--mini .player-cover {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+
+.dashboard-sidebar.collapsed .dashboard-label {
+  display: none;
 }
-.music-player--mini .player-info { display: none !important; }
-.music-player--mini .player-btn--mini-toggle {
+
+.dashboard-sidebar.collapsed .dashboard-item {
+  justify-content: center;
+  padding: 1rem;
+}
+
+.dashboard-toggle {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  top: 1rem;
+  left: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.35);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.dashboard-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  margin-top: 3rem;
+}
+
+.dashboard-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.dashboard-item:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  z-index: 5;
 }
 
-@media (max-width: 480px) {
-  .music-player { left: 50%; bottom: 12px; padding: 8px 10px; min-width: 180px; }
-  .music-player--mini { right: 12px; bottom: 12px; width: 64px; height: 64px; }
+.dashboard-item--active {
+  background: rgba(255, 100, 130, 0.2);
+  color: #ff6482;
+  border-left: 3px solid #ff6482;
+  padding-left: calc(1.2rem - 3px);
 }
 
-/* ensure toggle button remains tappable */
-.player-btn--mini-toggle { z-index: 99999; }
+.dashboard-sidebar.collapsed .dashboard-item--active {
+  border-left: none;
+  padding-left: 1rem;
+}
+
+.dashboard-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.dashboard-label {
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.dashboard-sidebar.collapsed .dashboard-nav {
+  margin-top: 4rem;
+}
+
+.dashboard-sidebar.collapsed .dashboard-toggle {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    width: 200px;
+    padding-top: 1.5rem;
+  }
+  .dashboard-sidebar.collapsed {
+    width: 60px;
+  }
+  .dashboard-item {
+    padding: 0.85rem 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-sidebar {
+    width: 180px;
+  }
+  .dashboard-sidebar.collapsed {
+    width: 55px;
+  }
+  .dashboard-label {
+    font-size: 0.85rem;
+  }
+  .dashboard-icon {
+    font-size: 1.2rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
 
 
 html {
@@ -96,6 +169,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   height: 100%;
   background-color: var(--dark-color);
   overflow: hidden;
@@ -150,6 +224,7 @@ body {
 .flowers {
   position: relative;
   transform: scale(0.9);
+  transform-origin: bottom center;
 }
 
 .flower {
@@ -1822,8 +1897,8 @@ body {
   bottom: 12vmin;
   left: 50%;
   transform: translateX(-50%);
-  width: 40vmin;
-  height: 30vmin;
+  width: clamp(120px, 40vmin, 400px);
+  height: clamp(90px, 30vmin, 300px);
   z-index: 150;
   isolation: isolate;
 }
@@ -2709,17 +2784,18 @@ body {
   70%      { margin-left: -2vmin; }
 }
 
-..music-player {
+.music-player {
   position: fixed;
   top: 16px;
-  left: 16px;
+  left: 256px;
   transform: none;
   transform-origin: top left;
-  width: min(92vw, 42rem);
+  width: min(calc(92vw - 256px), 42rem);
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+  color: #fff;
   background: rgba(18, 18, 24, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 2rem;
@@ -2727,28 +2803,35 @@ body {
   backdrop-filter: blur(18px);
   z-index: 500;
   overflow: hidden;
-  padding: 1rem;
-  position: relative;
+  transition: left 0.3s ease, width 0.3s ease;
 }
 
 .music-player--mini {
-  width: clamp(52px, 16vw, 96px) !important;
-  height: clamp(52px, 16vw, 96px) !important;
+  width: clamp(60px, 16vw, 104px) !important;
+  height: clamp(60px, 16vw, 104px) !important;
+  aspect-ratio: 1 / 1 !important;
   padding: 0 !important;
   border-radius: 50% !important;
   transform: none !important;
-  display: block !important;
-  background: rgba(18, 18, 24, 0.28) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  display: grid !important;
+  place-items: center;
+  background: rgba(18, 18, 24, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
   backdrop-filter: blur(18px) !important;
   overflow: visible;
+  box-sizing: border-box;
 }
 
 .music-player--mini .player-cover {
-  width: 100%;
-  height: 100%;
+  width: 86%;
+  height: 86%;
   border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18), transparent 18%),
+              radial-gradient(circle at 70% 70%, rgba(255,255,255,0.08), transparent 14%),
+              radial-gradient(circle, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 16%, transparent 18%),
+              linear-gradient(135deg, #7842ff 0%, #ff6cb2 45%, #ff7070 100%);
+  box-shadow: inset 0 0 0.4rem rgba(0,0,0,0.16);
 }
 
 .music-player--mini .player-info,
@@ -2756,7 +2839,7 @@ body {
 .music-player--mini .player-actions,
 .music-player--mini .player-time,
 .music-player--mini .player-progress {
-  display: none;
+  display: none !important;
 }
 
 .music-player--mini .player-btn--play-mini {
@@ -2767,9 +2850,9 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.16);
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   cursor: pointer;
   z-index: 2;
 }
@@ -2784,10 +2867,7 @@ body {
 }
 
 .music-player--mini .player-btn--mini-toggle {
-  position: absolute;
-  top: 0.55rem;
-  right: 0.55rem;
-  z-index: 4;
+  display: none !important;
 }
 
 .player-cover {
@@ -2888,6 +2968,7 @@ body {
 
 @media screen and (max-width: 768px) {
   .music-player {
+    top: auto;
     bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
@@ -2920,14 +3001,48 @@ body {
 }
 
 /* =====================================================
-   RESPONSIVE MOBILE
+   RESPONSIVE
    ===================================================== */
+
+/* ─── Màn hình lớn (≥ 1200px) ─── */
+@media screen and (min-width: 1200px) {
+  .flowers {
+    transform: scale(0.95);
+    transform-origin: bottom center;
+  }
+  .scene-characters {
+    width: clamp(200px, 35vmin, 500px);
+    height: clamp(150px, 26vmin, 380px);
+  }
+  .love-letter-wrap {
+    bottom: 20vmin;
+  }
+}
+
+/* ─── Trung bình (769px - 1024px) ─── */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .flowers {
+    transform: scale(0.8);
+    transform-origin: bottom center;
+  }
+  .scene-characters {
+    width: clamp(130px, 38vmin, 350px);
+    height: clamp(100px, 28vmin, 280px);
+  }
+  .love-letter-wrap {
+    bottom: 16vmin;
+  }
+  .envelope {
+    width: 22vmin;
+    height: 15vmin;
+  }
+}
 
 /* ─── Tablet & Mobile landscape (≤ 768px) ─── */
 @media screen and (max-width: 768px) {
-  /* Scale toàn bộ cảnh hoa lên cho mobile */
+  /* Tỉ lệ cảnh hoa nhỏ lại cho mobile để vừa màn hình dọc */
   .flowers {
-    transform: scale(1.6);
+    transform: scale(0.65);
     transform-origin: bottom center;
   }
 
@@ -2939,8 +3054,8 @@ body {
   /* Nhân vật chibi lớn hơn */
   .scene-characters {
     bottom: 10vmax;
-    width: 55vw;
-    height: 25vmax;
+    width: clamp(140px, 55vw, 350px);
+    height: clamp(80px, 25vmax, 280px);
   }
 
   /* Phong bì lớn hơn */
@@ -3042,7 +3157,7 @@ body {
 @media screen and (max-width: 480px) {
   /* Scale hoa lớn hơn nữa */
   .flowers {
-    transform: scale(2);
+    transform: scale(1.6);
     transform-origin: bottom center;
   }
 
@@ -3054,8 +3169,8 @@ body {
   /* Nhân vật */
   .scene-characters {
     bottom: 8vmax;
-    width: 60vw;
-    height: 22vmax;
+    width: clamp(120px, 60vw, 300px);
+    height: clamp(70px, 22vmax, 220px);
   }
 
   /* Phong bì */

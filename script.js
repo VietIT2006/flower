@@ -76,6 +76,14 @@ const init = () => {
 
   /* ── Click phong bì: toggle mở/đóng thư ── */
   let isOpen = false;
+  const letterPaper = document.getElementById('letterPaper');
+
+  // Chặn click trên lá thư không lan lên envelope (để đọc thư mà không bị đóng)
+  if (letterPaper) {
+    letterPaper.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
 
   if (envelope) {
     envelope.addEventListener('click', () => {
@@ -301,7 +309,7 @@ const init = () => {
       playPauseBtn.textContent = isPlaying ? '⏸' : '▶';
     }
     if (playPauseMiniBtn) {
-      playPauseMiniBtn.textContent = isPlaying ? '⏸' : '▶';
+      playPauseMiniBtn.textContent = isMini ? '💿' : (isPlaying ? '⏸' : '▶');
     }
   }
 
@@ -325,6 +333,7 @@ const init = () => {
     if (toggleMiniBtn) {
       toggleMiniBtn.textContent = enabled ? '⬜' : '◯';
     }
+    updatePlayButton();
   }
 
   function toggleMini() {
@@ -333,8 +342,11 @@ const init = () => {
 
   // Dragging logic for mini mode
   let isDragging = false;
+  let hasMoved = false;
   let dragOffsetX = 0;
   let dragOffsetY = 0;
+  let startX = 0;
+  let startY = 0;
 
   function clampToViewport(x, y, el) {
     const w = window.innerWidth;
@@ -348,10 +360,12 @@ const init = () => {
   }
 
   function onPointerDown(e) {
-    if (!isMini) return;
-    // don't start drag when interacting with controls or buttons
-    if (e.target.closest && e.target.closest('button, input, a, .player-controls, .player-actions, .player-progress, .player-meta, .player-time, .player-title, .player-artist')) return;
+    // allow dragging from the mini play button area, but ignore other controls
+    if (e.target.closest && e.target.closest('button:not(.player-btn--play-mini), input, a, .player-controls, .player-actions, .player-progress, .player-meta, .player-time, .player-title, .player-artist')) return;
     isDragging = true;
+    hasMoved = false;
+    startX = e.clientX;
+    startY = e.clientY;
     const rect = playerEl.getBoundingClientRect();
     dragOffsetX = e.clientX - rect.left;
     dragOffsetY = e.clientY - rect.top;
@@ -361,6 +375,10 @@ const init = () => {
 
   function onPointerMove(e) {
     if (!isDragging) return;
+    const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+    if (!hasMoved && dist < 5) return; // Bỏ qua nếu chỉ rung tay nhẹ (dưới 5px)
+    
+    hasMoved = true;
     const desiredLeft = e.clientX - dragOffsetX;
     const desiredTop = e.clientY - dragOffsetY;
     const pos = clampToViewport(desiredLeft, desiredTop, playerEl);
@@ -376,6 +394,21 @@ const init = () => {
     isDragging = false;
     try { playerEl.releasePointerCapture(e.pointerId); } catch (err) {}
     playerEl.style.transition = '';
+    
+    // Nếu chỉ là click (không kéo đi) và đang thu nhỏ, mở to ra
+    if (!hasMoved && isMini) {
+      setMiniMode(false);
+    }
+    
+    if (hasMoved) {
+      const preventClick = (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        playerEl.removeEventListener('click', preventClick, true);
+      };
+      playerEl.addEventListener('click', preventClick, true);
+      setTimeout(() => playerEl.removeEventListener('click', preventClick, true), 50);
+    }
   }
 
   function enableDragging() {
@@ -394,12 +427,13 @@ const init = () => {
     window.removeEventListener('pointerup', onPointerUp);
     playerEl.style.touchAction = '';
     playerEl.style.cursor = '';
-    // reset any inline positioning so it recenters
+    // reset any inline positioning so CSS rules take over
     playerEl.style.removeProperty('left');
     playerEl.style.removeProperty('top');
     playerEl.style.removeProperty('right');
     playerEl.style.removeProperty('bottom');
-    playerEl.style.transform = 'translateX(-50%)';
+    playerEl.style.removeProperty('transform');
+    playerEl.style.removeProperty('position');
   }
 
   function togglePlayPause() {
@@ -439,7 +473,14 @@ const init = () => {
     playPauseBtn.addEventListener('click', togglePlayPause);
   }
   if (playPauseMiniBtn) {
-    playPauseMiniBtn.addEventListener('click', togglePlayPause);
+    playPauseMiniBtn.addEventListener('click', () => {
+      if (isMini) {
+        // Bấm vào đĩa nhạc nhỏ → mở rộng ra player đầy đủ
+        setMiniMode(false);
+      } else {
+        togglePlayPause();
+      }
+    });
   }
   if (nextBtn) {
     nextBtn.addEventListener('click', nextTrack);
@@ -480,6 +521,29 @@ const init = () => {
   }
 
   loadTrack(currentTrackIndex);
+
+  // ========== DASHBOARD TOGGLE ==========
+  const dashboardSidebar = document.getElementById('dashboardSidebar');
+  const dashboardToggle = document.getElementById('dashboardToggle');
+  
+  if (dashboardToggle && dashboardSidebar) {
+    // Tự động thu gọn trên mobile khi load trang
+    if (window.innerWidth <= 768) {
+      dashboardSidebar.classList.add('collapsed');
+    }
+
+    dashboardToggle.addEventListener('click', () => {
+      dashboardSidebar.classList.toggle('collapsed');
+      // Dịch music player theo sidebar
+      if (playerEl && !isMini) {
+        const isCollapsed = dashboardSidebar.classList.contains('collapsed');
+        playerEl.style.left = isCollapsed ? '86px' : '256px';
+        playerEl.style.width = isCollapsed
+          ? 'min(calc(92vw - 86px), 42rem)'
+          : 'min(calc(92vw - 256px), 42rem)';
+      }
+    });
+  }
 
   // Bắt đầu mưa hoa đào và ảnh rơi ngay khi trang tải xong
   startSakuraRain();
