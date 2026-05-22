@@ -311,14 +311,11 @@ const init = () => {
     if (playerEl) {
       playerEl.classList.toggle('music-player--mini', enabled);
       if (enabled) {
-        // position at bottom-right by default
         playerEl.style.position = 'fixed';
-        // set explicit left/top based on current rect so dragging can move it freely
-        const rect = playerEl.getBoundingClientRect();
-        playerEl.style.left = rect.left + 'px';
-        playerEl.style.top = rect.top + 'px';
-        playerEl.style.right = 'auto';
-        playerEl.style.bottom = 'auto';
+        playerEl.style.setProperty('top', '16px', 'important');
+        playerEl.style.setProperty('left', '16px', 'important');
+        playerEl.style.setProperty('right', 'auto', 'important');
+        playerEl.style.setProperty('bottom', 'auto', 'important');
         playerEl.style.transform = 'none';
         enableDragging();
       } else {
@@ -367,10 +364,10 @@ const init = () => {
     const desiredLeft = e.clientX - dragOffsetX;
     const desiredTop = e.clientY - dragOffsetY;
     const pos = clampToViewport(desiredLeft, desiredTop, playerEl);
-    playerEl.style.left = pos.x + 'px';
-    playerEl.style.top = pos.y + 'px';
-    playerEl.style.right = 'auto';
-    playerEl.style.bottom = 'auto';
+    playerEl.style.setProperty('left', pos.x + 'px', 'important');
+    playerEl.style.setProperty('top', pos.y + 'px', 'important');
+    playerEl.style.setProperty('right', 'auto', 'important');
+    playerEl.style.setProperty('bottom', 'auto', 'important');
     playerEl.style.transform = 'none';
   }
 
@@ -398,10 +395,10 @@ const init = () => {
     playerEl.style.touchAction = '';
     playerEl.style.cursor = '';
     // reset any inline positioning so it recenters
-    playerEl.style.left = '';
-    playerEl.style.top = '';
-    playerEl.style.right = '';
-    playerEl.style.bottom = '';
+    playerEl.style.removeProperty('left');
+    playerEl.style.removeProperty('top');
+    playerEl.style.removeProperty('right');
+    playerEl.style.removeProperty('bottom');
     playerEl.style.transform = 'translateX(-50%)';
   }
 

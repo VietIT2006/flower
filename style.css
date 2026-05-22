@@ -2709,12 +2709,12 @@ body {
   70%      { margin-left: -2vmin; }
 }
 
-.music-player {
+..music-player {
   position: fixed;
-  bottom: 2vmin;
-  left: 50%;
-  transform: translateX(-50%);
-  transform-origin: bottom center;
+  top: 16px;
+  left: 16px;
+  transform: none;
+  transform-origin: top left;
   width: min(92vw, 42rem);
   padding: 1rem;
   display: flex;
@@ -2727,18 +2727,22 @@ body {
   backdrop-filter: blur(18px);
   z-index: 500;
   overflow: hidden;
-  position: fixed;
   padding: 1rem;
   position: relative;
 }
 
 .music-player--mini {
-  width: 6.4rem;
-  height: 6.4rem;
-  padding: 0;
-  border-radius: 50%;
-  justify-content: center;
-  overflow: hidden;
+  width: clamp(52px, 16vw, 96px) !important;
+  height: clamp(52px, 16vw, 96px) !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  transform: none !important;
+  display: block !important;
+  background: rgba(18, 18, 24, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  backdrop-filter: blur(18px) !important;
+  overflow: visible;
 }
 
 .music-player--mini .player-cover {
