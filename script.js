@@ -1,3 +1,6 @@
+// Hàm kiểm tra xem người dùng có đang dùng điện thoại không
+const isMobileDevice = () => window.innerWidth <= 768;
+
 const init = () => {
   // Xóa class container để bắt đầu chạy mọi animation CSS
   document.body.classList.remove("container");
@@ -121,18 +124,21 @@ const init = () => {
   function startSakuraRain() {
     if (!sakuraCont) return;
 
-    // Mở đầu với ít cánh hoa rơi nhẹ
-    for (let i = 0; i < 20; i++) {
+    // Giảm số lượng hoa mở màn trên mobile (chỉ 5 cánh thay vì 20)
+    const initialCount = isMobileDevice() ? 5 : 20;
+    for (let i = 0; i < initialCount; i++) {
       setTimeout(createSakuraPetal, Math.random() * 1600);
     }
 
-    // Cánh hoa rơi liên tục
+    // Tăng thời gian chờ và giảm số hoa rơi trên mobile
+    const intervalTime = isMobileDevice() ? 1200 : 650;
     setInterval(() => {
-      const count = Math.floor(Math.random() * 3) + 2; // 2–4 cánh hoa mỗi đợt
+      // Mobile rơi 1-2 cánh, PC rơi 2-4 cánh
+      const count = isMobileDevice() ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 2;
       for (let i = 0; i < count; i++) {
         setTimeout(createSakuraPetal, Math.random() * 900);
       }
-    }, 650);
+    }, intervalTime);
   }
 
   function createSakuraPetal() {
@@ -167,6 +173,9 @@ const init = () => {
 
   function startImageRain() {
     if (!sakuraCont || IMAGE_FILES.length === 0) return;
+
+    // TẮT HOÀN TOÀN mưa ảnh dung lượng lớn trên điện thoại để chống giật lag
+    if (isMobileDevice()) return;
 
     for (let i = 0; i < 10; i++) {
       setTimeout(createFallingImage, Math.random() * 1800);
@@ -218,7 +227,9 @@ const init = () => {
 
   function spawnSakuraBurst() {
     if (!sakuraCont) return;
-    for (let i = 0; i < 18; i++) {
+    // Điện thoại chỉ bung 8 cánh thay vì 18 cánh
+    const burstCount = isMobileDevice() ? 8 : 18;
+    for (let i = 0; i < burstCount; i++) {
       setTimeout(createSakuraPetal, Math.random() * 450);
     }
   }

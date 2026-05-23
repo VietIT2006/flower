@@ -2689,6 +2689,8 @@ body {
   animation:
     sakura-fall var(--pd) var(--delay) ease-in forwards,
     sakura-sway var(--pd) var(--delay) ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
 }
 
 .sakura-petal::before {
@@ -2727,6 +2729,8 @@ body {
   top: -12vmin;
   width: clamp(3.5vmin, var(--img-size), 10vw);
   max-width: 8rem;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
   opacity: 0;
   pointer-events: none;
   animation:
@@ -2752,6 +2756,23 @@ body {
 
   .falling-image img {
     border-radius: 1vmin;
+  }
+
+  /* ========== TỐI ƯU HÓA HIỆU NĂNG CHO MOBILE ========== */
+  /* Tắt hiệu ứng blur bao phủ toàn màn hình */
+  .night {
+    filter: none !important; 
+  }
+  
+  /* Giảm đổ bóng và tắt animation chớp nháy của bó hoa */
+  .bouquet-glowing {
+    filter: drop-shadow(0 0 1vmin rgba(255,100,180,0.5)) !important;
+    animation: none !important;
+  }
+  
+  /* Giảm độ nặng của bóng đổ phong thư */
+  .envelope {
+    filter: drop-shadow(0 0 1vmin rgba(255,120,180,0.4)) !important;
   }
 }
 
