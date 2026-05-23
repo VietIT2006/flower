@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Bộ Sưu Tập Ảnh Dễ Thương</title>
+  <link rel="icon" type="image/x-icon" href="./flower_346218.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="container">
+  <div class="night"></div>
+
+  <!-- ========== DASHBOARD SIDEBAR ========== -->
+  <div class="dashboard-sidebar" id="dashboardSidebar">
+    <button class="dashboard-toggle" id="dashboardToggle" title="Toggle Sidebar">☰</button>
+    <nav class="dashboard-nav">
+      <a href="index.html" class="dashboard-item" data-section="home">
+        <span class="dashboard-icon">🏠</span>
+        <span class="dashboard-label">Trang chủ</span>
+      </a>
+      <a href="kyniem.html" class="dashboard-item" data-section="countdown">
+        <span class="dashboard-icon">💕</span>
+        <span class="dashboard-label">Đếm ngày yêu</span>
+      </a>
+      <a href="gallery.html" class="dashboard-item dashboard-item--active" data-section="gallery">
+        <span class="dashboard-icon">🖼️</span>
+        <span class="dashboard-label">Bộ sưu tập ảnh</span>
+      </a>
+      <a href="#settings" class="dashboard-item" data-section="settings">
+        <span class="dashboard-icon">⚙️</span>
+        <span class="dashboard-label">Setting</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ========== GALLERY CONTAINER ========== -->
+  <div class="gallery-container">
+    <div class="gallery-header">
+      <h1 class="gallery-title">✨ Bộ Sưu Tập Ảnh Dễ Thương ✨</h1>
+      <p class="gallery-subtitle">Những khoảnh khắc đáng nhớ của chúng ta</p>
+    </div>
+
+    <div class="gallery-filters">
+      <button class="filter-btn filter-btn--active" data-filter="all">Tất cả</button>
+      <button class="filter-btn" data-filter="couple">Cặp đôi</button>
+      <button class="filter-btn" data-filter="moments">Khoảnh khắc</button>
+      <button class="filter-btn" data-filter="nature">Thiên nhiên</button>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn view-btn--active" id="gridViewBtn" title="Chế độ lưới">⊞ Lưới</button>
+      <button class="view-btn" id="timelineViewBtn" title="Chế độ dòng thời gian">≡ Dòng thời gian</button>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Images will be loaded here by JavaScript -->
+    </div>
+
+    <div class="timeline-container" id="timelineContainer" style="display: none;">
+      <svg id="timelineSVG" class="timeline-svg"></svg>
+      <!-- Timeline will be rendered here -->
+    </div>
+  </div>
+
+  <!-- ========== LIGHTBOX MODAL ========== -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-overlay" id="lightboxOverlay"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">✕</button>
+      <div class="lightbox-image-container">
+        <img class="lightbox-image" id="lightboxImage" src="" alt="Full size image">
+      </div>
+      <div class="lightbox-controls">
+        <button class="lightbox-btn lightbox-btn--prev" id="lightboxPrev">❮</button>
+        <button class="lightbox-btn lightbox-btn--next" id="lightboxNext">❯</button>
+      </div>
+      <p class="lightbox-counter" id="lightboxCounter"></p>
+    </div>
+  </div>
+
+  <script src="./gallery.js"></script>
+</body>
+</html>
