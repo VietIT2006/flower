@@ -16,20 +16,49 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========== GALLERY DATA ==========
   // Các ảnh hiện có trong img folder
   const galleryImages = [
-    { id: 1, src: 'img/z7854779413765_ef0611deb5a4244cfe5ae57b90275c48.jpg', category: 'couple', title: 'Yêu nhau ❤️', date: '14/02/2026' },
-    { id: 2, src: 'img/z7854779417657_c49e6004c429fd860d466f1eba839c61.jpg', category: 'moments', title: 'Khoảnh khắc đẹp', date: '17/02/2026' },
-    { id: 3, src: 'img/z7854779423808_ab53af9d8a8c86fbe4781f0c192cce21.jpg', category: 'couple', title: 'Cùng nhau', date: '20/02/2026' },
-    { id: 4, src: 'img/z7854779433202_817eb77b21d8b90471531d4b855edb51.jpg', category: 'moments', title: 'Nụ cười', date: '22/02/2026' },
-    { id: 5, src: 'img/z7854779440068_c39ca4e7ccbe0f0fabbc4551ac215867.jpg', category: 'nature', title: 'Thiên nhiên', date: '25/02/2026' },
-    { id: 6, src: 'img/z7854779440373_00a5a0760688887552b8cde45dde7a9f.jpg', category: 'couple', title: 'Tình yêu', date: '28/02/2026' },
     { id: 7, src: 'img/z7854779447526_459783bafc7ce494b2840bc58799c9d8.jpg', category: 'moments', title: 'Vui vẻ', date: '03/03/2026' },
     { id: 8, src: 'img/z7854779455909_2a2fe64dfdcf1a5312867b9a2d271b5e.jpg', category: 'nature', title: 'Đẹp lắm', date: '08/03/2026' },
     { id: 9, src: 'img/z7854779457257_f91f0b64121dd08f4bd2f713d19e536c.jpg', category: 'couple', title: 'Mình yêu nhau', date: '12/03/2026' },
+    { id: 1, src: 'img/z7854779413765_ef0611deb5a4244cfe5ae57b90275c48.jpg', category: 'couple', title: 'Yêu nhau ❤️', date: '28/04/2026' },
+    { id: 2, src: 'img/z7854779417657_c49e6004c429fd860d466f1eba839c61.jpg', category: 'moments', title: 'Khoảnh khắc đẹp', date: '28/04/2026' },
+    { id: 3, src: 'img/z7854779423808_ab53af9d8a8c86fbe4781f0c192cce21.jpg', category: 'couple', title: 'Cùng nhau', date: '28/04/2026' },
+    { id: 4, src: 'img/z7854779433202_817eb77b21d8b90471531d4b855edb51.jpg', category: 'moments', title: 'Nụ cười', date: '28/04/2026' },
+    { id: 5, src: 'img/z7854779440068_c39ca4e7ccbe0f0fabbc4551ac215867.jpg', category: 'nature', title: 'Thiên nhiên', date: '28/04/2026' },
+    { id: 6, src: 'img/z7854779440373_00a5a0760688887552b8cde45dde7a9f.jpg', category: 'couple', title: 'Tình yêu', date: '28/04/2026' },
   ];
 
   let currentFilter = 'all';
   let currentImageIndex = 0;
   let filteredImages = [...galleryImages];
+
+  // ========== XỬ LÝ DRAG & DROP TOÀN CỤC (FIX LỖI VĂNG MẤT HÌNH) ==========
+  let activeDragItem = null;
+  let startMouse = { x: 0, y: 0 };
+  let startItemPos = { x: 0, y: 0 };
+
+  document.addEventListener('pointermove', (e) => {
+    if (!activeDragItem) return;
+    
+    // Tính khoảng cách chuột đã di chuyển so với lúc mới bấm (Delta)
+    let deltaX = e.clientX - startMouse.x;
+    let deltaY = e.clientY - startMouse.y;
+    
+    // Chỉ cộng dồn vào vị trí ban đầu, giúp phần tử không bị nhảy cóc
+    activeDragItem.style.left = (startItemPos.x + deltaX) + 'px';
+    activeDragItem.style.top = (startItemPos.y + deltaY) + 'px';
+    
+    updateTimelinePath(); // Cập nhật lại dây thừng uốn lượn
+  });
+
+  document.addEventListener('pointerup', (e) => {
+    if (activeDragItem) {
+      activeDragItem.classList.remove('dragging');
+      // Nhả con trỏ chuột ra
+      try { activeDragItem.releasePointerCapture(e.pointerId); } catch(err) {}
+      activeDragItem = null;
+      updateTimelinePath();
+    }
+  });
 
   // ========== RENDER GALLERY ==========
   function renderGallery(filter = 'all') {
@@ -82,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filteredImages.forEach((image, index) => {
       const timelineItem = document.createElement('div');
       timelineItem.className = 'timeline-item';
-      timelineItem.draggable = true;
+      // Xóa thuộc tính draggable = true để chống xung đột "bóng ma" HTML5
       timelineItem.dataset.index = index;
       
       timelineItem.innerHTML = `
@@ -102,51 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
         openLightbox(image.src, index);
       });
 
-      // ========== DRAG & DROP WITH MOUSE EVENTS ==========
-      let isDragging = false;
-      let offset = { x: 0, y: 0 };
-      let startPos = { x: 0, y: 0 };
-
-      timelineItem.addEventListener('mousedown', (e) => {
+      // ========== BẮT ĐẦU KÉO THẢ TIMELINE ITEM ==========
+      timelineItem.addEventListener('pointerdown', (e) => {
+        // Bỏ qua nếu người dùng bấm vào nút "Xem ảnh"
         if (e.target.closest('.timeline-view-btn')) return;
-        isDragging = true;
+        
+        activeDragItem = timelineItem;
         timelineItem.classList.add('dragging');
         
-        const rect = timelineItem.getBoundingClientRect();
-        const containerRect = document.getElementById('timelineContainer').getBoundingClientRect();
+        // Ép trình duyệt dồn sự kiện cảm ứng vào phần tử này (ngăn scroll trang trên điện thoại)
+        try { timelineItem.setPointerCapture(e.pointerId); } catch(err) {}
         
-        offset.x = e.clientX - rect.left;
-        offset.y = e.clientY - rect.top;
-        startPos.x = rect.left - containerRect.left;
-        startPos.y = rect.top - containerRect.top;
-      });
+        // Lưu tọa độ chuột lúc bắt đầu click
+        startMouse.x = e.clientX;
+        startMouse.y = e.clientY;
 
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        
-        const container = document.getElementById('timelineContainer');
-        const containerRect = container.getBoundingClientRect();
-        
-        let newX = e.clientX - containerRect.left - offset.x;
-        let newY = e.clientY - containerRect.top - offset.y;
-        
-        // Clamp to container bounds
-        newX = Math.max(0, Math.min(newX, container.offsetWidth - timelineItem.offsetWidth));
-        newY = Math.max(0, Math.min(newY, container.offsetHeight - timelineItem.offsetHeight));
-        
-        timelineItem.style.left = newX + 'px';
-        timelineItem.style.top = newY + 'px';
-        timelineItem.style.right = 'auto';
-        
-        updateTimelinePath();
-      });
-
-      document.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
-          timelineItem.classList.remove('dragging');
-          updateTimelinePath();
-        }
+        // Lưu tọa độ hiện tại của thẻ (mặc định là 0 nếu chưa bị kéo)
+        startItemPos.x = parseFloat(timelineItem.style.left) || 0;
+        startItemPos.y = parseFloat(timelineItem.style.top) || 0;
       });
       
       timelineContent.appendChild(timelineItem);
@@ -176,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get all dot positions
     const positions = [];
     items.forEach((item) => {
-      // Get position of timeline-item
       const itemRect = item.getBoundingClientRect();
       const dot = item.querySelector('.timeline-dot');
       const dotRect = dot.getBoundingClientRect();

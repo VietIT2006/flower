@@ -3514,7 +3514,6 @@ body {
     font-size: 1.8rem;
   }
 }
-
 /* ========== GALLERY STYLES ========== */
 .gallery-container {
   position: fixed;
@@ -3570,17 +3569,8 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-.filter-btn:hover {
-  border-color: #ffb4cd;
-  color: #fff;
-}
-
-.filter-btn--active {
-  background: rgba(255, 100, 130, 0.3);
-  border-color: #ffb4cd;
-  color: #ffb4cd;
-  box-shadow: 0 0 15px rgba(255, 100, 130, 0.3);
-}
+.filter-btn:hover { border-color: #ffb4cd; color: #fff; }
+.filter-btn--active { background: rgba(255, 100, 130, 0.3); border-color: #ffb4cd; color: #ffb4cd; box-shadow: 0 0 15px rgba(255, 100, 130, 0.3); }
 
 .gallery-grid {
   display: grid;
@@ -3588,16 +3578,17 @@ body {
   gap: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
+  padding-bottom: 3rem;
 }
 
 .gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 1.5rem;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1; /* Cắt ảnh thành hình vuông cho đều ở chế độ lưới */
   cursor: pointer;
-  group/item;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .gallery-image {
@@ -3625,230 +3616,225 @@ body {
   transition: opacity 0.3s ease;
 }
 
-.gallery-item:hover .gallery-overlay {
-  opacity: 1;
-}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-title-overlay { color: #fff; font-size: 1.1rem; font-weight: 600; text-align: center; font-family: 'Inter', sans-serif; }
+.gallery-view-btn { padding: 0.6rem 1.5rem; background: #ffb4cd; border: none; border-radius: 0.5rem; color: #010113; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.gallery-view-btn:hover { background: #fff; transform: scale(1.05); }
 
-.gallery-title-overlay {
+.gallery-date-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 100, 130, 0.9);
   color: #fff;
-  font-size: 1.1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.8rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255, 100, 130, 0.4);
 }
 
-.gallery-view-btn {
-  padding: 0.6rem 1.5rem;
-  background: #ffb4cd;
-  border: none;
-  border-radius: 0.5rem;
-  color: #010113;
-  font-weight: 600;
+.view-toggle {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+}
+
+.view-btn {
+  padding: 0.6rem 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 1.5rem;
   cursor: pointer;
+  font-weight: 500;
   transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+}
+.view-btn:hover { border-color: #ffb4cd; color: #fff; }
+.view-btn--active { background: rgba(255, 100, 130, 0.3); border-color: #ffb4cd; color: #ffb4cd; box-shadow: 0 0 15px rgba(255, 100, 130, 0.3); }
+
+/* ========== TIMELINE STYLES (HỢP NHẤT SO LE & DÂY THỪNG) ========== */
+.timeline-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 4rem 2rem;
 }
 
-.gallery-view-btn:hover {
-  background: #fff;
+.timeline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.timeline-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 2rem 0;
+}
+
+.timeline-item {
+  position: relative;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(n+5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Thẻ Lẻ (Bên Trái) */
+.timeline-item:nth-child(odd) {
+  align-self: flex-start;
+  align-items: flex-end;
+}
+.timeline-item:nth-child(odd) .timeline-dot { right: -12%; }
+
+/* Thẻ Chẵn (Bên Phải) */
+.timeline-item:nth-child(even) {
+  align-self: flex-end;
+  align-items: flex-start;
+  margin-top: -8rem;
+}
+.timeline-item:nth-child(even) .timeline-dot { left: -12%; }
+
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  background: #ffb4cd;
+  border: 4px solid #ff6482;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px rgba(255, 100, 130, 0.8);
+  z-index: 5;
+}
+
+.timeline-image-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 320px;
+  cursor: grab;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-image-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  border-color: #ffb4cd;
+}
+
+.timeline-item.dragging .timeline-image-card {
+  cursor: grabbing;
   transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(255, 100, 130, 0.2);
 }
 
-/* ========== LIGHTBOX STYLES ========== */
+.timeline-image { width: 100%; border-radius: 0.5rem; aspect-ratio: 4/3; object-fit: cover; }
+.timeline-date { color: #ffb4cd; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.8rem; }
+.timeline-title { color: #fff; margin-top: 0.8rem; text-align: center; font-size: 1rem; border-top: 1px solid rgba(255, 180, 205, 0.2); padding-top: 1rem; }
+.timeline-view-btn { display: block; width: 100%; margin-top: 1rem; padding: 0.6rem; background: rgba(255, 100, 130, 0.2); color: #ffb4cd; border: 1px solid rgba(255, 100, 130, 0.5); border-radius: 0.5rem; cursor: pointer; transition: all 0.3s; font-weight: bold; }
+.timeline-view-btn:hover { background: #ff6482; color: #010113; }
+
+/* ========== LIGHTBOX STYLES (BẢN CHUẨN MỚI NHẤT) ========== */
 .lightbox {
   position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: none;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.lightbox--active {
-  display: flex;
+.lightbox.lightbox--active {
   opacity: 1;
+  visibility: visible;
 }
 
 .lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(5px);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
 }
 
 .lightbox-content {
   position: relative;
-  z-index: 1001;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  gap: 1.5rem;
+  width: 90vw;
+  max-width: 800px;
 }
 
-.lightbox-close {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  width: 3rem;
-  height: 3rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 1.8rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1002;
-}
+.lightbox-image-container { position: relative; display: flex; justify-content: center; width: 100%; }
+.lightbox-image { max-width: 100%; max-height: 75vh; border-radius: 8px; box-shadow: 0 5px 30px rgba(0,0,0,0.4); object-fit: contain; }
+.lightbox-close { position: absolute; top: -40px; right: 0; background: none; border: none; color: #ffb4cd; font-size: 2rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.lightbox-close:hover { color: #ff6482; transform: scale(1.1); }
+.lightbox-controls { position: absolute; top: 50%; left: -60px; right: -60px; display: flex; justify-content: space-between; transform: translateY(-50%); pointer-events: none; }
+.lightbox-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 45px; height: 45px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; pointer-events: auto; backdrop-filter: blur(5px); transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+.lightbox-btn:hover { background: #ff6482; border-color: #ff6482; transform: scale(1.1); }
+.lightbox-counter { color: #ffb4cd; margin-top: 15px; font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; }
 
-.lightbox-close:hover {
-  background: rgba(255, 100, 130, 0.3);
-  border-color: #ffb4cd;
-  color: #ffb4cd;
-}
-
-.lightbox-image-container {
-  max-width: 90vw;
-  max-height: 85vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lightbox-image {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 1rem;
-  box-shadow: 0 0 30px rgba(255, 100, 130, 0.3);
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.lightbox-controls {
-  display: flex;
-  gap: 2rem;
-  z-index: 1002;
-}
-
-.lightbox-btn {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: rgba(255, 100, 130, 0.2);
-  border: 2px solid #ffb4cd;
-  color: #ffb4cd;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lightbox-btn:hover {
-  background: rgba(255, 100, 130, 0.4);
-  transform: scale(1.1);
-}
-
-.lightbox-counter {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  z-index: 1002;
-}
-
-/* ========== GALLERY RESPONSIVE ========== */
+/* ========== RESPONSIVE ĐIỆN THOẠI (GỘP CHUNG GALLERY & LIGHTBOX) ========== */
 @media screen and (max-width: 768px) {
-  .gallery-container {
-    left: 0;
-    width: 100%;
-  }
-
-  .dashboard-sidebar:not(.collapsed) ~ .gallery-container {
-    display: none;
-  }
-
-  .gallery-title {
-    font-size: 2rem;
-  }
-
-  .gallery-subtitle {
-    font-size: 0.95rem;
-  }
-
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .lightbox-close {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.5rem;
-    top: 1rem;
-    right: 1rem;
-  }
-
-  .lightbox-image-container {
-    max-width: 95vw;
-    max-height: 70vh;
-  }
-
-  .lightbox-controls {
-    gap: 1rem;
-  }
-
-  .lightbox-btn {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.2rem;
-  }
+  .gallery-container { left: 0; width: 100%; padding: 2rem 1rem; }
+  .dashboard-sidebar:not(.collapsed) ~ .gallery-container { display: none; }
+  .gallery-title { font-size: 2rem; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; padding-bottom: 2rem; }
+  
+  .timeline-item { width: 85%; }
+  .timeline-item:nth-child(even) { margin-top: -3rem; }
+  .timeline-item:nth-child(odd) .timeline-dot { right: -12%; }
+  .timeline-item:nth-child(even) .timeline-dot { left: -12%; }
+  
+  .lightbox-controls { left: -10px; right: -10px; }
+  .lightbox-btn { width: 35px; height: 35px; font-size: 1.2rem; background: rgba(0, 0, 0, 0.5); }
+  .lightbox-close { top: -45px; }
 }
 
 @media screen and (max-width: 480px) {
-  .gallery-title {
-    font-size: 1.5rem;
-  }
-
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.8rem;
-  }
-
-  .filter-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  .lightbox-image-container {
-    max-width: 98vw;
-    max-height: 60vh;
-  }
-
-  .lightbox-btn {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
-  }
-
-  .lightbox-counter {
-    font-size: 0.9rem;
-  }
+  .gallery-title { font-size: 1.5rem; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.8rem; }
+  .filter-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+  
+  .timeline-item { width: 90%; }
+  .timeline-item:nth-child(odd) .timeline-dot { right: -10%; }
+  .timeline-item:nth-child(even) .timeline-dot { left: -10%; }
 }
-
 /* ========== GALLERY DATE BADGE ========== */
 .gallery-date-badge {
   position: absolute;
@@ -4112,85 +4098,396 @@ body {
 }
 
 /* ========== TIMELINE RESPONSIVE ========== */
+/* ========== RESPONSIVE TỐI ƯU HÓA MOBILE (SỬA LỖI VỠ LAYOUT) ========== */
 @media screen and (max-width: 768px) {
-  .timeline-content::before {
-    left: 1.5rem;
+  /* 1. Ẩn Sidebar khi không dùng để nhường chỗ cho nội dung */
+  .dashboard-sidebar {
+    width: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+  }
+  
+  /* Đẩy container chính full màn hình */
+  .gallery-container {
+    left: 0 !important;
+    width: 100% !important;
+    padding: 1rem !important;
   }
 
-  .timeline-item--left,
-  .timeline-item--right {
-    width: 100%;
-    margin-left: 0;
-    padding-left: 4rem;
-    padding-right: 0;
-    justify-content: flex-start;
+  /* 2. Fix lưới ảnh (Grid) - Chia làm 2 cột thay vì cố định 250px */
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* 3. Fix Timeline (Dòng thời gian) - Đưa hết về bên trái */
+  .timeline-content {
+    gap: 2rem !important;
+  }
+  
+  .timeline-item {
+    width: 90% !important;
+    align-self: flex-start !important; /* Đưa tất cả về bên trái */
+    margin-top: 0 !important; /* Xóa margin âm để không bị đè chữ */
+    padding-left: 1.5rem !important;
+  }
+
+  /* Ẩn bớt các hiệu ứng dư thừa trên mobile */
+  .timeline-item:nth-child(even) {
+    align-items: flex-start !important;
   }
 
   .timeline-dot {
-    left: 1.5rem;
+    left: -5% !important; /* Dấu chấm nằm ngay mép trái */
   }
 
-  .timeline-date {
-    left: 1.5rem;
-    transform: translateX(-50%);
+  /* 4. Fix Lightbox (Xem ảnh) - Nút bấm lớn hơn để dễ chạm ngón tay */
+  .lightbox-content {
+    width: 95vw !important;
   }
 
-  .timeline-image-card {
-    min-width: 200px;
+  .lightbox-controls {
+    left: 5px !important;
+    right: 5px !important;
   }
 
-  .timeline-image {
-    height: 200px;
+  .lightbox-btn {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.2rem !important;
+    background: rgba(0, 0, 0, 0.6) !important;
   }
 
-  .timeline-item--left .timeline-image-card::after,
-  .timeline-item--right .timeline-image-card::before {
-    display: none;
-  }
-
-  .view-toggle {
-    gap: 0.5rem;
-  }
-
-  .view-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
+  .lightbox-close {
+    top: 10px !important;
+    right: 10px !important;
+    font-size: 2.5rem !important;
   }
 }
 
-@media screen and (max-width: 480px) {
-  .timeline-container {
-    padding: 0 1rem;
+/* Fix riêng cho màn hình cực nhỏ (iPhone SE, máy cũ) */
+@media screen and (max-width: 400px) {
+  .gallery-grid {
+    grid-template-columns: 1fr !important; /* Chỉ 1 cột duy nhất */
+  }
+  
+  .gallery-title {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Thêm position: relative để giới hạn phạm vi của dây thừng */
+.timeline-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  position: relative; 
+}
+
+/* Thêm class này để dây thừng (SVG) lơ lửng làm nền mà không đẩy ảnh xuống */
+.timeline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Quan trọng: Cho phép click xuyên qua dây thừng để trúng thẻ ảnh */
+  z-index: 0;
+}
+
+/* Đẩy các tấm ảnh nổi lên trên cùng (Che lên dây thừng) */
+.timeline-content {
+  position: relative;
+  padding: 2rem 0;
+  z-index: 1; 
+}
+
+/* ========== HIỆU ỨNG TIMELINE SO LE (ZÍC-ZẮC) ========== */
+.timeline-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 4rem 2rem;
+}
+
+/* Đưa SVG (sợi dây) lơ lửng làm nền phía dưới */
+.timeline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Quan trọng: Cho phép click xuyên qua dây */
+  z-index: 0;
+}
+
+/* Khung chứa các ảnh xếp theo cột */
+.timeline-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem; /* Khoảng cách dọc giữa các ảnh */
+}
+
+/* Từng thẻ ảnh chung */
+.timeline-item {
+  position: relative;
+  width: 45%; /* Thẻ chiếm chưa tới 1 nửa màn hình để chừa khoảng trống giữa */
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* 1. THẺ LẺ (1, 3, 5...) nằm bên TRÁI */
+.timeline-item:nth-child(odd) {
+  align-self: flex-start;
+  align-items: flex-end; /* Canh nội dung dạt về bên phải (gần sợi dây) */
+}
+/* Đẩy dấu chấm của thẻ lẻ ra mép phải */
+.timeline-item:nth-child(odd) .timeline-dot {
+  right: -12%;
+}
+
+/* 2. THẺ CHẴN (2, 4, 6...) nằm bên PHẢI */
+.timeline-item:nth-child(even) {
+  align-self: flex-end;
+  align-items: flex-start; /* Canh nội dung dạt về bên trái (gần sợi dây) */
+  margin-top: -8rem; /* KÉO THẺ CHẴN LÊN TRÊN để đan xen vào thẻ lẻ */
+}
+/* Đẩy dấu chấm của thẻ chẵn ra mép trái */
+.timeline-item:nth-child(even) .timeline-dot {
+  left: -12%;
+}
+
+/* Dấu chấm mốc thời gian */
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  background: #ffb4cd;
+  border: 4px solid #ff6482;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px rgba(255, 100, 130, 0.8);
+  z-index: 5;
+}
+
+/* Khung ảnh timeline */
+.timeline-image-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 320px;
+  cursor: grab;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-image-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.timeline-item.dragging .timeline-image-card {
+  cursor: grabbing;
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(255, 100, 130, 0.2);
+}
+
+.timeline-image {
+  width: 100%;
+  border-radius: 0.5rem;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+.timeline-date {
+  color: #ffb4cd;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.timeline-title {
+  color: #fff;
+  margin-top: 0.8rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.timeline-view-btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.6rem;
+  background: rgba(255, 100, 130, 0.2);
+  color: #ffb4cd;
+  border: 1px solid rgba(255, 100, 130, 0.5);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.timeline-view-btn:hover {
+  background: #ff6482;
+  color: #fff;
+}
+
+/* ĐIỀU CHỈNH SO LE TRÊN ĐIỆN THOẠI (MOBILE) */
+@media screen and (max-width: 768px) {
+  .timeline-item {
+    width: 80%; /* Mở rộng thẻ trên điện thoại vì màn hình nhỏ */
+  }
+  
+  .timeline-item:nth-child(even) {
+    margin-top: -3rem; /* Giảm độ đan xen trên mobile để chữ không bị đè */
   }
 
-  .timeline-content::before {
-    left: 1rem;
-  }
+  /* Chỉnh lại vị trí dấu chấm trên mobile cho cân với chiều ngang */
+  .timeline-item:nth-child(odd) .timeline-dot { right: -13%; }
+  .timeline-item:nth-child(even) .timeline-dot { left: -13%; }
+}
+/* =====================================================
+   LIGHTBOX (TRÌNH XEM ẢNH PHÓNG TO)
+   ===================================================== */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; /* Luôn nổi lên trên cùng, che cả thanh sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
 
-  .timeline-dot {
-    left: 1rem;
-    width: 1.2rem;
-    height: 1.2rem;
-    border-width: 2px;
-  }
+/* Lệnh này sẽ hiển thị lightbox khi bạn click chuột (được JS gọi) */
+.lightbox.lightbox--active {
+  opacity: 1;
+  visibility: visible;
+}
 
-  .timeline-date {
-    left: 1rem;
-    font-size: 0.75rem;
-    padding: 0.3rem 0.6rem;
-  }
+/* Lớp nền đen mờ phía sau bức ảnh */
+.lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
 
-  .timeline-image {
-    height: 150px;
-  }
+/* Khung nội dung chính chứa bức ảnh */
+.lightbox-content {
+  position: relative;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90vw;
+  max-width: 800px;
+}
 
-  .timeline-title {
-    padding: 0.8rem;
-    font-size: 0.9rem;
-  }
+.lightbox-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 
-  .timeline-view-btn {
-    padding: 0.6rem;
-    font-size: 0.85rem;
+/* Kích thước và hiệu ứng bóng đổ của bức ảnh */
+.lightbox-image {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: 8px;
+  box-shadow: 0 5px 30px rgba(0,0,0,0.4);
+  object-fit: contain;
+}
+
+/* Nút Đóng (Dấu X) */
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #ffb4cd;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lightbox-close:hover {
+  color: #ff6482;
+  transform: scale(1.1);
+}
+
+/* Trục ngang chứa 2 nút Qua/Lại */
+.lightbox-controls {
+  position: absolute;
+  top: 50%;
+  left: -60px;
+  right: -60px;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none; /* Tránh cản trở click chuột vào khoảng trống */
+}
+
+/* Nút Qua Ảnh / Lùi Ảnh (❮ ❯) */
+.lightbox-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  pointer-events: auto; /* Kích hoạt lại click chuột */
+  backdrop-filter: blur(5px);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-btn:hover {
+  background: #ff6482;
+  border-color: #ff6482;
+  transform: scale(1.1);
+}
+
+/* Bộ đếm số thứ tự ảnh (Ví dụ: 1 / 9) */
+.lightbox-counter {
+  color: #ffb4cd;
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* GIAO DIỆN TỐI ƯU HÓA CHO ĐIỆN THOẠI */
+@media screen and (max-width: 768px) {
+  /* Ép 2 nút Qua/Lại đi vào bên trong mép màn hình */
+  .lightbox-controls {
+    left: -10px;
+    right: -10px;
+  }
+  .lightbox-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.5); /* Nền đậm hơn để dễ bấm trên điện thoại */
+  }
+  .lightbox-close {
+    top: -45px;
   }
 }
